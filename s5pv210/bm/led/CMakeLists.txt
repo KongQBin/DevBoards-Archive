@@ -1,9 +1,13 @@
-set(SRCS start.S)
+file(GLOB SRCS CONFIGURE_DEPENDS
+    ${BM_SRCS}
+    *.c
+    ../uart/uart.c
+)
 
 # 方案 A: USB Boot 目标
 add_executable(led_usb.elf ${SRCS})
 target_link_options(led_usb.elf PRIVATE
-    -T ${CMAKE_CURRENT_SOURCE_DIR}/usb_link.lds
+    -T ${USB_LINK}
     -nostdlib
 )
 
@@ -30,7 +34,7 @@ add_custom_target(led_usb
 # ============================================================
 add_executable(led_sd.elf ${SRCS})
 target_link_options(led_sd.elf PRIVATE
-    -T ${CMAKE_CURRENT_SOURCE_DIR}/link.lds
+    -T ${SD_LINK}
     -nostdlib
 )
 
@@ -61,7 +65,7 @@ add_custom_target(led_sd
     VERBATIM
 )
 
-add_custom_target(dump
+add_custom_target(led_dump
     COMMAND ${CMAKE_COMMAND} -E echo "--- USB ELF Dump ---"
     COMMAND ${CMAKE_OBJDUMP} -d led_usb.elf
     COMMAND ${CMAKE_COMMAND} -E echo "--- SD ELF Dump ---"
