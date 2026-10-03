@@ -1,0 +1,14 @@
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+
+# 设置交叉编译链前缀
+set(CROSS_COMPILE "arm-none-eabi-")
+
+set(CMAKE_C_COMPILER ${CROSS_COMPILE}gcc)
+set(CMAKE_ASM_COMPILER ${CROSS_COMPILE}gcc)
+set(CMAKE_OBJCOPY ${CROSS_COMPILE}objcopy)
+set(CMAKE_OBJDUMP ${CROSS_COMPILE}objdump)
+set(CMAKE_READELF ${CROSS_COMPILE}readelf)
+
+# 告诉 CMake 这是一个裸机工程，不要去链接标准 libc 库做连通性测试
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
