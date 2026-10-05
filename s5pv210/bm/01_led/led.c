@@ -7,13 +7,6 @@
 #define GPD0CON     (*(volatile unsigned int *)0xE02000A0)
 #define GPD0DAT     (*(volatile unsigned int *)0xE02000A4)
 
-/* 软件延时函数 */
-static void delay(volatile unsigned int time) {
-    while (time--) {
-        // 汇编级的空循环，保持 CPU 消耗
-    }
-}
-
 void led_init()
 {
     /* 配置 LED 相关的 GPIO 为输出模式 (Output: 0001) */
@@ -24,25 +17,21 @@ void led_init()
     // 配置 GPD0_1
     GPD0CON &= ~(0xF << 4);     // 清空 [7:4]
     GPD0CON |=  (0x1 << 4);     // 填入 0001
+
+    // 默认上电全灭 (高电平)
+    GPJ0DAT |= (0x7 << 3);
+    GPD0DAT |= (0x1 << 1);
 }
 
-void blink_loop(load_cb cb, int loop_num)
-{
-    /* 进入主循环：闪烁 */
-    // 正数 = 次数
-    // 0 或 负数 = 死循环
-    while (loop_num--) {
-        if(cb) cb();
-        // --- 点亮 LED (输出低电平 0) ---
-        GPJ0DAT &= ~(0x7 << 3); // 清空 bit 3, 4, 5
-        GPD0DAT &= ~(0x1 << 1); // 清空 bit 1
-
-        delay(0x50000);
-
-        // --- 熄灭 LED (输出高电平 1) ---
-        GPJ0DAT |= (0x7 << 3);
-        GPD0DAT |= (0x1 << 1);
-
-        delay(0x50000);
+/* 2. 导出给业务层的 API：用一个函数控制 4 个灯的独立亮灭 */
+void led_set_state(int led_id, int state) {
+    if (led_id >= 0 && led_id <= 2) {
+        int shift = led_id + 3; // LED0~2 对应 bit 3,4,5
+        if (state) GPJ0DAT &= ~(1 << shift); // 亮 (拉低)
+        else       GPJ0DAT |=  (1 << shift); // 灭 (拉高)
+    } else if (led_id == 3) {
+        if (state) GPD0DAT &= ~(1 << 1);
+        else       GPD0DAT |=  (1 << 1);
     }
 }
+

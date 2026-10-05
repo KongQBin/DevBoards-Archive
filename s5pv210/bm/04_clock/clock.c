@@ -53,3 +53,4 @@ void clock_init(void) {
     /* 4. 切换时钟源：将系统时钟切到 PLL 上 */
     CLK_SRC0 = (1 << 4) | // MPLL_SEL: 0=晶振FIN, 1=使用刚刚锁定的 FOUTMPLL
                (1 << 0);  // APLL_SEL: 0=晶振FIN, 1=使用刚刚锁定的 FOUTAPLL
+}

@@ -3,6 +3,14 @@ file(GLOB SRCS CONFIGURE_DEPENDS
     *.c
     ../01_led/led.c
     ../02_uart/uart.c
+    ../05_timer/timer.c
+)
+
+# 获取编译器底层的 libgcc 数学辅助库路径 (解决不支持硬件除法的问题)
+execute_process(
+    COMMAND ${CMAKE_C_COMPILER} -print-libgcc-file-name
+    OUTPUT_VARIABLE LIBGCC_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
 # 方案 A: USB Boot 目标
@@ -11,6 +19,8 @@ target_link_options(buzzer_usb.elf PRIVATE
     -T ${USB_LINK}
     -nostdlib
 )
+# 明确链接 libgcc
+target_link_libraries(buzzer_usb.elf PRIVATE ${LIBGCC_PATH})
 
 add_custom_command(TARGET buzzer_usb.elf POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary buzzer_usb.elf ${CMAKE_CURRENT_BINARY_DIR}/buzzer_usb.bin
@@ -38,6 +48,8 @@ target_link_options(buzzer_sd.elf PRIVATE
     -T ${SD_LINK}
     -nostdlib
 )
+# 明确链接 libgcc
+target_link_libraries(buzzer_sd.elf PRIVATE ${LIBGCC_PATH})
 
 add_custom_command(TARGET buzzer_sd.elf POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary buzzer_sd.elf ${CMAKE_CURRENT_BINARY_DIR}/buzzer_sd.bin
