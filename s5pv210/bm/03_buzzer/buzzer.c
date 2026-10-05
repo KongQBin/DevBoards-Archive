@@ -18,3 +18,17 @@ void buzzer_off(void) {
     /* 蜂鸣器引脚拉低 */
     GPD0DAT &= ~(1 << 2);
 }
+
+static void delay(volatile unsigned int time) {
+    while (time--) {}
+}
+
+/* 软件模拟 PWM 发声函数 */
+void software_beep(unsigned int pitch_delay, unsigned int duration) {
+    while (duration--) {
+        buzzer_on();
+        delay(pitch_delay); // 控制频率（音调）
+        buzzer_off();
+        delay(pitch_delay); // 控制频率（音调）
+    }
+}

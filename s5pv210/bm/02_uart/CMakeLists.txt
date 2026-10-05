@@ -1,6 +1,7 @@
 file(GLOB SRCS CONFIGURE_DEPENDS
     ${BM_SRCS}
     *.c
+    ../01_led/led.c
 )
 
 # 方案 A: USB Boot 目标
