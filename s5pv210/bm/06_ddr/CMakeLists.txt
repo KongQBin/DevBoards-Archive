@@ -3,6 +3,7 @@ file(GLOB SRCS CONFIGURE_DEPENDS
     *.c
     ../01_led/led.c
     ../02_uart/uart.c
+    ../02_uart/printk.c
     ../03_buzzer/buzzer.c
     ../04_clock/clock.c
     ../05_timer/timer.c

@@ -1,5 +1,6 @@
 #include "../01_led/led.h"
 #include "../02_uart/uart.h"
+#include "../02_uart/printk.h"
 #include "../03_buzzer/buzzer.h"
 #include "../04_clock/clock.h"
 #include "../05_timer/timer.h"
@@ -11,12 +12,12 @@ int main(void) {
     uart2_init();
     timer_base_init();  // 初始化 PWM 定时器硬件
 
-    uart2_puts("\r\nHardware PWM Timer Activated!\r\n");
+    printk("\r\nHardware PWM Timer Activated!\r\n");
 
     buzzer_init(0);
     /* 标准音阶频率表 (Do, Re, Mi, Fa, So, La, Xi) */
     unsigned int notes[] = {262,/* 294,*/ 330,/* 349,*/ 392,/* 440,*/ 494};
-    uart2_puts("Playing Scale...\r\n");
+    printk("Playing Scale...\r\n");
     for (int i = 0; i < sizeof(notes)/sizeof(unsigned int); i++) {
         buzzer_play(notes[i]);  // 硬件精准输出音调
         delay_ms(200);          // 持续 200 毫秒
@@ -24,9 +25,9 @@ int main(void) {
     buzzer_play(0); // 停止发声
 
 
-    uart2_puts("\r\nDDR initing~\r\n");
+    printk("\r\nDDR initing~\r\n");
     ddr_init();
-    uart2_puts("\r\nDDR init finish!\r\n");
+    printk("\r\nDDR init finish!\r\n");
     ddr_test();
     return 0;
 }

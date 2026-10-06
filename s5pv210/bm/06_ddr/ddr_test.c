@@ -1,5 +1,6 @@
 #include "ddr_test.h"
 #include "../02_uart/uart.h"
+#include "../02_uart/printk.h"
 #include "../05_timer/timer.h"
 
 static inline int test_value(volatile unsigned int *addr, unsigned int write_value)
@@ -53,7 +54,7 @@ int ddr_test(void)
 
     /* 阶段 1：特征点多模式交叉测试 */
     for (i = 0; i < sizeof(test_patterns)/sizeof(test_patterns[0]); i++) {
-        uart2_puts("Testing Pattern...\r\n"); // 如果有 printf 就能打印当前的 pattern 了
+        printk("Testing Pattern %x ...\r\n",test_patterns[i]);
         for (j = 0; j < sizeof(test_addrs)/sizeof(test_addrs[0]); j++) {
             if (test_value(test_addrs[j], test_patterns[i]) < 0) {
                 return -1;
