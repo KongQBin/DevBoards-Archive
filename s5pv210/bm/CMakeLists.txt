@@ -7,7 +7,8 @@ add_subdirectory(02_uart)       # 串口
 add_subdirectory(03_buzzer)     # 蜂鸣器
 add_subdirectory(04_clock)      # 时钟
 add_subdirectory(05_timer)      # 定时器
-add_subdirectory(06_ddr)        # 定时器
+add_subdirectory(06_ddr)        # 内存
+add_subdirectory(07_sd)        # sd卡驱动
 
 add_custom_target(bm_bash SOURCES
     ${SD_LINK}
