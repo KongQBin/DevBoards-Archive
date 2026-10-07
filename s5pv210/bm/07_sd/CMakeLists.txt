@@ -1,5 +1,6 @@
 file(GLOB SRCS CONFIGURE_DEPENDS
     ${BM_SRCS}
+    *.h
     *.c
     ../01_led/led.c
     ../02_uart/uart.c
